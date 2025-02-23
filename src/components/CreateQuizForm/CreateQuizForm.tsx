@@ -95,7 +95,7 @@ const CreateQuizzForm = () => {
           console.log(`${key}:`, value instanceof File ? value.name : value);
       }
       console.log(preparedFormData.entries())
-      const response = await fetch('http://localhost:6600/api/quiz/create-quiz', {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/quiz/create-quiz`, {
           method: 'POST',
           body: preparedFormData,
           credentials: "include",

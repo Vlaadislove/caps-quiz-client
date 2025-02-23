@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import styles from './ContactFormQuiz.module.css';
 import { postAnswer } from '../../../redux/Quiz/QuizSlice';
+import ThankYouPage from '../ThankYouPage/ThankYouPageю';
 
 interface ContactInput {
   id: string;
@@ -24,14 +25,15 @@ interface ContactForm {
 interface ContactFormProps {
   contactForm: ContactForm;
   contactInfo: { [key: string]: string };
-  links: {personalDataPolicy: string, privacyPolicy: string}
+  links: { personalDataPolicy: string, privacyPolicy: string }
   handleUpdateContactInfo: (info: { [key: string]: string }) => void;
 }
 
-const ContactFormQuiz: React.FC<ContactFormProps> = ({links, contactForm, contactInfo, handleUpdateContactInfo }) => {
+const ContactFormQuiz: React.FC<ContactFormProps> = ({ links, contactForm, contactInfo, handleUpdateContactInfo }) => {
 
   const [formContact, setFormContact] = useState(contactInfo);
   const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [agrre, setAgree] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -47,7 +49,7 @@ const ContactFormQuiz: React.FC<ContactFormProps> = ({links, contactForm, contac
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Останавливаем отправку формы, если есть ошибки
 
     const newErrors: { [key: string]: boolean } = {};
@@ -68,17 +70,25 @@ const ContactFormQuiz: React.FC<ContactFormProps> = ({links, contactForm, contac
       formContact
     };
 
-    dispatch(postAnswer(newContactInfoAndAnswers));
-
+    const result = await dispatch(postAnswer(newContactInfoAndAnswers));
+    if (result.payload === 200) {
+      setIsSubmitted(true);
+    }
+    console.log('Результат отправки ответов:', result);
     console.log('Ответы на вопросы:', answers);
     console.log('Контактная информация:', formContact);
   };
+
+  if (isSubmitted) {
+    return <ThankYouPage />;
+  }
+
 
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
       {contactForm.backgroundImage && <div
         className={styles.imageBlock}
-        style={{ backgroundImage: `url(${contactForm.backgroundImage.file})`}}
+        style={{ backgroundImage: `url(${contactForm.backgroundImage.file})` }}
       ></div>}
       <div className={styles.formBlock}>
         <h2 className={styles.formTitle}>Заполните форму, чтобы получить результаты теста</h2>

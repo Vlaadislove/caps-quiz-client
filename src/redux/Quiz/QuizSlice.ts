@@ -45,12 +45,16 @@ export const postAnswer = createAsyncThunk(
       for (const [key, value] of preparedFormData.entries()) {
         console.log(`${key}:`, value instanceof File ? value.name : value);
       }
-      await fetch('http://localhost:6600/api/quiz/send-answer', {
+      const response = await fetch('http://localhost:6600/api/quiz/send-answer', {
         method: 'POST',
         body: preparedFormData,
-
       });
 
+      if (!response.ok) {
+        throw new Error(`Ошибка: ${response.status} ${response.statusText}`);
+      }
+
+      return response.status; // Возвращаем HTTP статус
       // const { data } = await instance.post(`/quiz/send-answer`, preparedFormData);
       // console.log(data)А
 
@@ -123,7 +127,6 @@ export const quizSlice = createSlice({
     builder.addCase(getQuiz.fulfilled, (state, action) => {
       const quiz = action.payload;
       state.quiz = quiz;
-
       state.currentStep = quiz.startPage === null ? 0 : -1
       // Инициализация answers
       state.answers = quiz.questions.reduce(

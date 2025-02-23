@@ -44,10 +44,7 @@ const Quiz: React.FC = () => {
     "--button-color-rgb": hexToRgb(quiz.design.buttonColor)
   };
 
-console.log(hexToRgb(quiz.design.buttonColor))
-
   if (currentStep === -1) {
-
     return <div className={styles.container} style={themeStyles}><StartPage onNext={handleNext} startPage={quiz.startPage} /></div>
   }
 
