@@ -1,0 +1,54 @@
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.gridContainer {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, 1fr); /* Всегда 3 колонки до 820px */
+}
+
+@media (max-width: 820px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr); /* 2 колонки на маленьких экранах */
+  }
+}
+
+.card {
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  transition: border 0.2s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; /* Карточка растягивается на всю ширину */
+}
+
+.card:hover {
+  border: 1px solid blue;
+  transform: scale(1.05);
+}
+
+.selected {
+  border: 2px solid blue;
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Квадратное изображение */
+  object-fit: cover; /* Заполняет квадрат без искажений */
+  border-radius: 5px;
+}
+
+.text {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}

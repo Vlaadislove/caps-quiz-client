@@ -1,0 +1,126 @@
+.container {
+  position: relative;
+}
+
+.fileUploadContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #e2e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 203px;
+  cursor: pointer;
+  background-color: #fafafa;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.fileUploadContainer:hover {
+  background-color: rgb(20, 13, 217, 0.1);
+  /* Розовый цвет с прозрачностью */
+  /* opacity: 0.1; */
+  border-color: var(--button-color)
+    /* Розовая рамка */
+}
+
+.uploadIcon {
+  width: 40px;
+  height: 40px;
+  color: var(--button-color)
+}
+
+.fileUploadContainer p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+
+.fileInfo {
+  margin-top: 10px;
+}
+
+.popup {
+  position: fixed;
+  bottom: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #3f3636;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 840px;
+  transition: bottom 0.3s ease-in-out;
+}
+
+.popupButton {
+  margin-left: 20px;
+  background-color: #3f3636;
+  color: rgb(255, 29, 29);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 820px) {
+  .popup {
+    bottom: 121px;
+  }
+}
+
+
+.fileTag {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--button-color);
+  /* Розовый цвет */
+  color: white;
+  padding: 5px 10px;
+  border-radius: 16px;
+  font-size: 14px;
+  margin-top: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 10px;
+  /* Расстояние между именем файла и крестиком */
+}
+
+.fileName {
+  max-width: 150px;
+  /* Ограничение на длину имени */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileUploadContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #e2e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 203px;
+  cursor: pointer;
+  background-color: #fafafa;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.fileUploadContainer.dragging {
+  background-color: rgba(0, 123, 255, 0.1); /* Синий фон при перетаскивании */
+  border-color: #007bff; /* Синий цвет рамки */
+}
+
+.fileUploadContainer p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
