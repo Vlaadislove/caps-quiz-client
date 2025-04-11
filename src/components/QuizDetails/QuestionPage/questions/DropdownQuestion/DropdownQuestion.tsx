@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./DropdownQuestion.module.css";
 
 interface DropdownQuestionProps {
@@ -19,6 +19,11 @@ const DropdownQuestion: React.FC<DropdownQuestionProps> = ({
   onAnswer,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string>(answer || "");
+
+  useEffect(() => {
+    setSelectedOption(answer || '');
+  }, [answer]);
+
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;

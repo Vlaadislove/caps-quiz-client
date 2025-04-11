@@ -26,6 +26,9 @@ const ImageUrlQuestion: React.FC<ImageSelectionQuestionProps> = ({
 }) => {
   const [selectedImage, setSelectedImage] = useState<string>(answer?.file || "");
 
+
+
+
   const handleImageSelect = (selectedImageObj: ImageTextAnswers) => {
     setSelectedImage(selectedImageObj.file);
     onAnswer(selectedImageObj);

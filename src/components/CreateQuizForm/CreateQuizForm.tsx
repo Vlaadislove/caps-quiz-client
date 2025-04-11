@@ -5,6 +5,7 @@ import Design, { IDesign } from "./Design/Design";
 import StartPage, { IStartPage } from "./StartPage/StartPage";
 import { processObjectToFormData } from "../../utils/lib";
 import InformationAboutQuiz, { QuizInfo } from "./InformationAboutQuiz/InformationAboutQuiz";
+import { instance } from "../../utils/axios";
 
 export interface Question {
   id: string;
@@ -76,40 +77,38 @@ const CreateQuizzForm = () => {
 
 
   const handleCreateQuiz = async () => {
-
-
     const quizData = {
       startPage: startPageData.useStartPage ? startPageData : null,
       questions: questionsData,
       contactForm: contactFormData,
       design: designData,
-      quizInfo
+      quizInfo,
     };
+  
     console.log("Созданный квиз:", quizData);
-
+  
     try {
       const preparedFormData = processObjectToFormData(quizData);
-
-
+  
       for (const [key, value] of preparedFormData.entries()) {
-          console.log(`${key}:`, value instanceof File ? value.name : value);
+        console.log(`${key}:`, value instanceof File ? value.name : value);
       }
-      console.log(preparedFormData.entries())
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/quiz/create-quiz`, {
-          method: 'POST',
-          body: preparedFormData,
-          credentials: "include",
-      });
-
-      if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log('Upload successful:', result);
-  } catch (error) {
-      console.error('Upload failed:', error);
-  }
+  
+      const response = await instance.post(
+        "/quiz/create-quiz",
+        preparedFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+  
+      console.log("Upload successful:", response.data); // <-- ВСЕ ДАННЫЕ ВОТ ТУТ
+    } catch (error) {
+      console.error("Upload failed:", error);
+    }
   };
 
   return (

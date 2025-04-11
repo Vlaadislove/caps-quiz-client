@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./FileUploadQuestion.module.css";
 
 interface FileUploadQuestionProps {
@@ -22,7 +22,12 @@ const FileUploadQuestion: React.FC<FileUploadQuestionProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const maxFileSize = 10 * 1024 * 1024; // 10MB
+  const maxFileSize = 10 * 1024 * 1024; 
+
+  useEffect(() => {
+    setSelectedFile(answer || null);
+  }, [answer]);
+
 
   const fileTypeMapping: { [key: string]: string } = {
     any: "*",
@@ -33,6 +38,8 @@ const FileUploadQuestion: React.FC<FileUploadQuestionProps> = ({
   };
 
   const isValidFileType = (file: File): boolean => {
+    if (question.typeFile === "any") return true;
+    
     const allowedTypes = fileTypeMapping[question.typeFile].split(",").map(ext => ext.trim());
     const fileExtension = file.name.split(".").pop()?.toLowerCase() || "";
 

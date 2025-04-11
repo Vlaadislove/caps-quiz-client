@@ -22,10 +22,8 @@ const SingleChoiceQuestion: React.FC<SingleChoiceQuestionProps> = ({
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(answer);
 
   useEffect(() => {
-    if (answer) {
-      setSelectedAnswer(answer);
-    }
-  }, [answer]);
+    setSelectedAnswer(answer);
+  }, [answer, question.id]);
 
   const handleOptionChange = (option: string) => {
     setSelectedAnswer(option);

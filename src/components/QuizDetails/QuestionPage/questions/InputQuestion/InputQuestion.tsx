@@ -14,16 +14,17 @@ answer: string | null;
 }
 
 const InputQuestion: React.FC<InputQuestionProps> = ({ question, answer, onAnswer }) => {
+  
   const [inputValue, setInputValue] = useState<string>(typeof answer === 'string' ? answer : '');
 
 
-  // Обновление состояния при изменении ввода
   useEffect(() => {
-    onAnswer(inputValue);
-  }, [inputValue, onAnswer]);
+    setInputValue(typeof answer === 'string' ? answer : '');
+  }, [answer]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    onAnswer(e.target.value);
   };
 
   return (

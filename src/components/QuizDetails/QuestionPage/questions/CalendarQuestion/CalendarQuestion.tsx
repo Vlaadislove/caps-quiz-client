@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface CalendarQuestionProps {
   question: {
@@ -12,12 +12,17 @@ interface CalendarQuestionProps {
 }
 
 const CalendarQuestion: React.FC<CalendarQuestionProps> = ({ question, answer, onAnswer }) => {
+
   const [selectedDate, setSelectedDate] = useState<string>(answer || '');
+
+  useEffect(() => {
+    setSelectedDate(answer || '');
+  }, [answer]);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const date = event.target.value;
     setSelectedDate(date);
-    onAnswer(date); // Сохраняем дату в формате ISO (yyyy-MM-dd)
+    onAnswer(date);
   };
 
   return (

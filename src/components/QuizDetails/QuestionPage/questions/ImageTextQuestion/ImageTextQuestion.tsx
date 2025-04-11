@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./ImageTextQuestion.module.css";
 
 interface ImageTextAnswers {
@@ -26,6 +26,14 @@ const ImageTextQuestion: React.FC<ImageTextQuestionProps> = ({
   const [selectedOption, setSelectedOption] = useState<ImageTextAnswers | null>(
     answer
   );
+
+  useEffect(() => {
+    if (Array.isArray(answer)) {
+      setSelectedOption(null);
+    } else {
+      setSelectedOption(answer);
+    }
+  }, [answer]);
 
   const handleOptionChange = (option: ImageTextAnswers) => {
     setSelectedOption(option);

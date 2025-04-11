@@ -22,25 +22,27 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>(answer || []);
 
   useEffect(() => {
-    if (answer) {
+    if (Array.isArray(answer)) {
       setSelectedAnswers(answer);
+    } else {
+      setSelectedAnswers([]);
     }
   }, [answer]);
 
   const handleCheckboxChange = (option: string) => {
-    setSelectedAnswers((prevSelected) =>
-      prevSelected.includes(option)
+    setSelectedAnswers((prevSelected) => {
+      const newSelected = prevSelected.includes(option)
         ? prevSelected.filter((item) => item !== option)
-        : [...prevSelected, option]
-    );
+        : [...prevSelected, option];
+
+      onAnswer(newSelected);
+      return newSelected;
+    });
   };
 
-  // Синхронизация локального состояния с глобальным через `onAnswer`
-  useEffect(() => {
-    onAnswer(selectedAnswers);
-  }, [selectedAnswers, onAnswer]);
 
-console.log(selectedAnswers)
+
+  console.log(selectedAnswers)
   return (
     <div>
       <h2>{question.question}</h2>
@@ -53,7 +55,7 @@ console.log(selectedAnswers)
             <input
               type="checkbox"
               id={option}
-              name={`selector-${question.id}`} 
+              name={`selector-${question.id}`}
               checked={selectedAnswers.includes(option)}
               onChange={() => handleCheckboxChange(option)}
             />
@@ -63,7 +65,7 @@ console.log(selectedAnswers)
         ))}
       </ul>
     </div>
-    
+
   );
 };
 

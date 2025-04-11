@@ -15,7 +15,7 @@ const Quiz: React.FC = () => {
   const { quiz, currentStep, answers, contactInfo, } = useSelector((state: RootState) => state.quiz);
   const params = useParams()
 
-
+  //TODO: где то тут баг
   useEffect(() => {
     dispatch(getQuiz(params.id as string));
   }, [dispatch]);
@@ -50,8 +50,9 @@ const Quiz: React.FC = () => {
 
   if (currentStep < quiz.questions.length) {
     const question = quiz.questions[currentStep];
+
     const answerData = answers[question.id];
-    const answer = answerData.answer; // Извлекаем только поле `answer`
+    const answer = answerData.answer;
     const isNextDisabled = !answer || (Array.isArray(answer) && answer.length === 0);
     // const isNextDisabled = question.required && (!answer || answer.length === 0);
 
@@ -76,7 +77,7 @@ const Quiz: React.FC = () => {
         handleUpdateContactInfo={handleUpdateContactInfo}
         contactForm={quiz.contactForm}
         contactInfo={contactInfo}
-        links = {{privacyPolicy: quiz.quizInfo.privacyPolicy, personalDataPolicy: quiz.quizInfo.personalDataPolicy}}
+        links={{ privacyPolicy: quiz.quizInfo.privacyPolicy, personalDataPolicy: quiz.quizInfo.personalDataPolicy }}
       />
     </div>
 
