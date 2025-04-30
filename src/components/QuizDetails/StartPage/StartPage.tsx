@@ -8,12 +8,14 @@ interface StartPageProps {
 }
 
 const StartPage: React.FC<StartPageProps> = ({ onNext, startPage }) => {
-  const { formData, logoImage, backgroundImage} = startPage;
+  const { formData, logoImage, backgroundImage } = startPage;
 
   return (
     <div className={styles.container}>
       {/* Left Image Section */}
-      <div className={styles.leftSection} style={{ backgroundImage: `url(${backgroundImage.file})` }}></div>
+      <div className={styles.leftSection} style={{
+        backgroundImage: backgroundImage?.file ? `url(${backgroundImage.file})` : "none",
+      }}></div>
 
       {/* Right Content Section */}
       <div className={styles.rightSection}>
@@ -32,13 +34,13 @@ const StartPage: React.FC<StartPageProps> = ({ onNext, startPage }) => {
           <h1 className={styles.heading}>{formData.title}</h1>
           <p className={styles.description}>{formData.description}</p>
           <button onClick={onNext} className={styles.button}>
-          {formData.buttonText}
+            {formData.buttonText}
           </button>
         </div>
 
         {/* Footer Section */}
         <div className={styles.footer}>
-          <a  className={styles.phoneNumber} href="tel:89999999999">{formData.phoneNumber}</a>
+          <a className={styles.phoneNumber} href="tel:89999999999">{formData.phoneNumber}</a>
           <p className={styles.companyName}>{formData.companyName}</p>
         </div>
       </div>

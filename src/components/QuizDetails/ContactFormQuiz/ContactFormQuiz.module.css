@@ -23,25 +23,36 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start; /* Выравниваем контент по левому краю */
+  align-items: flex-start;
+  /* Выравниваем контент по левому краю */
   padding: 40px;
   background-color: var(--background-color);
 }
 
 .formTitle {
+  margin: 0;
   font-size: 24px;
   font-weight: bold;
-  text-align: left; /* Заголовок теперь слева */
+  text-align: left;
   color: #333;
   margin-bottom: 20px;
   line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+.formSubtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
 }
 
 .inputContainer {
   width: 100%;
   max-width: 400px;
   margin-bottom: 15px;
-  text-align: left; /* Ввод данных тоже слева */
+  text-align: left;
+  /* Ввод данных тоже слева */
 }
 
 .input {
@@ -65,7 +76,8 @@
 .privacyContainer {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Выравниваем текст политики */
+  justify-content: flex-start;
+  /* Выравниваем текст политики */
   font-size: 14px;
   color: #777;
   max-width: 400px;
@@ -99,7 +111,8 @@
   border-radius: 8px;
   cursor: pointer;
   margin-top: 20px;
-  align-self: flex-start; /* Кнопка тоже по левому краю */
+  align-self: flex-start;
+  /* Кнопка тоже по левому краю */
 }
 
 /* Медиа-запрос для мобильных устройств */
@@ -110,7 +123,8 @@
 
   .imageBlock {
     width: 100%;
-    height: 30vh; /* Теперь изображение занимает 30% высоты экрана */
+    height: 30vh;
+    /* Теперь изображение занимает 30% высоты экрана */
   }
 
   .formBlock {

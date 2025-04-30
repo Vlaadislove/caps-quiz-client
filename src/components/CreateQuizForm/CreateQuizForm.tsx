@@ -52,6 +52,8 @@ const CreateQuizzForm = () => {
       { id: "name", placeholder: "Имя", required: false },
       { id: "email", placeholder: "email@example.com", required: false },
       { id: "phone", placeholder: "+7 (900) 000-00-00", required: false },
+      { id: 'companyName', placeholder: 'Название компании', required: false },
+      { id: 'source', placeholder: 'Откуда вы узнали о нас?', required: false },
     ],
     backgroundImage: null,
   });
@@ -84,16 +86,16 @@ const CreateQuizzForm = () => {
       design: designData,
       quizInfo,
     };
-  
+
     console.log("Созданный квиз:", quizData);
-  
+
     try {
       const preparedFormData = processObjectToFormData(quizData);
-  
+
       for (const [key, value] of preparedFormData.entries()) {
         console.log(`${key}:`, value instanceof File ? value.name : value);
       }
-  
+
       const response = await instance.post(
         "/quiz/create-quiz",
         preparedFormData,
@@ -104,7 +106,7 @@ const CreateQuizzForm = () => {
           withCredentials: true,
         }
       );
-  
+
       console.log("Upload successful:", response.data); // <-- ВСЕ ДАННЫЕ ВОТ ТУТ
     } catch (error) {
       console.error("Upload failed:", error);

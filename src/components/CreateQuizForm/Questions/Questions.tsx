@@ -10,7 +10,8 @@ interface QuestionsProps {
 
 export type Answer =
   | { text: string; file: File | null; preview: string }
-  | string;
+  | string
+  | { placeholder: string };
 
 
 interface ValidationError {
@@ -31,6 +32,7 @@ const Questions: React.FC<QuestionsProps> = ({ questionsData, setQuestionsData }
   }, [questionsData]);
 
   const handleAddQuestion = (type: Question["type"]) => {
+
     let typeFile = "any";
     let defaultAnswers: Answer[] = [];
 
@@ -40,7 +42,9 @@ const Questions: React.FC<QuestionsProps> = ({ questionsData, setQuestionsData }
       defaultAnswers = [{ text: "", file: null, preview: "" }];
     } else if (type === "imageUrl") {
       defaultAnswers = [{ text: "", file: null, preview: "" }];
-    } else if (!["input", "calendar"].includes(type)) {
+    } else if (type === "input") {
+      defaultAnswers = [{ placeholder: "" }];
+    } else if (!["calendar"].includes(type)) {
       defaultAnswers = [""];
     }
 
@@ -95,46 +99,6 @@ const Questions: React.FC<QuestionsProps> = ({ questionsData, setQuestionsData }
       })
     );
   };
-
-  // const validateQuestions = () => {
-  //   const errors: ValidationError[] = [];
-
-  //   questionsData.forEach((question) => {
-  //     if (!question.question.trim()) {
-  //       errors.push({ id: question.id, type: "question" });
-  //     }
-
-  //     if (question.type !== "input") {
-  //       if (question.answers.length === 0) {
-  //         errors.push({ id: question.id, type: "answers_empty" });
-  //       }
-
-  //       question.answers.forEach((answer, index) => {
-  //         if (question.type === "imageText") {
-  //           if (
-  //             typeof answer !== "string" &&
-  //             "text" in answer &&
-  //             (!answer.text.trim() || !answer.file)
-  //           ) {
-  //             errors.push({ id: question.id, type: "answer", index });
-  //           }
-  //         } else if (question.type === "imageUrl") {
-  //           if (typeof answer !== "string" && !answer.file) {
-  //             errors.push({ id: question.id, type: "answer", index });
-  //           }
-  //         } else if (typeof answer === "string") {
-  //           if (!answer.trim()) {
-  //             errors.push({ id: question.id, type: "answer", index });
-  //           }
-  //         }
-  //       });
-  //     }
-  //   });
-
-  //   setValidationErrors(errors);
-  //   setIsQuizValid(errors.length === 0);
-  // };
-
 
   const hasError = (id: string, type: ValidationError["type"], index?: number) => {
     return validationErrors.some(
@@ -194,7 +158,7 @@ const Questions: React.FC<QuestionsProps> = ({ questionsData, setQuestionsData }
           </select>
         </div>
       )}
-
+{question.type !== "input" && (
       <DragDropContext onDragEnd={(result) => handleDragEndAnswers(question.id, result)}>
         <Droppable droppableId={question.id}>
           {(provided) => (
@@ -361,7 +325,7 @@ const Questions: React.FC<QuestionsProps> = ({ questionsData, setQuestionsData }
           )}
         </Droppable>
       </DragDropContext>
-
+    )}
 
       {!["input", "fileUpload", "calendar"].includes(question.type) && (
         <button
@@ -380,6 +344,77 @@ const Questions: React.FC<QuestionsProps> = ({ questionsData, setQuestionsData }
           Добавить ответ
         </button>
       )}
+
+{question.type === "input" && (
+  <DragDropContext onDragEnd={(result) => handleDragEndAnswers(question.id, result)}>
+    <Droppable droppableId={question.id}>
+      {(provided) => (
+        <ul
+          {...provided.droppableProps}
+          ref={provided.innerRef}
+          className={styles.answerList}
+        >
+          {question.answers.map((answer, index) => {
+            // пропускаем всё, что не является placeholder-объектом
+            if (typeof answer !== "object" || !("placeholder" in answer)) return null;
+
+            return (
+              <Draggable
+                key={`${question.id}-input-${index}`}
+                draggableId={`${question.id}-input-${index}`}
+                index={index}
+              >
+                {(provided) => (
+                  <li
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    className={styles.answerItem}
+                  >
+                    <span {...provided.dragHandleProps} className={styles.dragHandle}>☰</span>
+                    <input
+                      type="text"
+                      value={answer.placeholder}
+                      onChange={(e) => {
+                        const updatedAnswers = [...question.answers];
+                        updatedAnswers[index] = { placeholder: e.target.value };
+                        handleUpdateQuestion(question.id, { answers: updatedAnswers });
+                      }}
+                      placeholder={`Введите плейсхолдер для поля ${index + 1}`}
+                      className={styles.questionInput}
+                    />
+                    <button
+                      onClick={() => {
+                        const updatedAnswers = question.answers.filter((_, i) => i !== index);
+                        handleUpdateQuestion(question.id, { answers: updatedAnswers });
+                      }}
+                      className={styles.deleteButton}
+                    >
+                      Удалить
+                    </button>
+                  </li>
+                )}
+              </Draggable>
+            );
+          })}
+          {provided.placeholder}
+        </ul>
+      )}
+    </Droppable>
+  </DragDropContext>
+)}
+{question.type === "input" && (
+  <button
+    onClick={() => {
+      handleUpdateQuestion(question.id, {
+        answers: [...question.answers, { placeholder: "" }],
+      });
+    }}
+    className={styles.addAnswerButton}
+  >
+    Добавить поле ввода
+  </button>
+)}
+
     </div>
   );
 

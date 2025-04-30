@@ -10,7 +10,7 @@ import { ArrowLeft } from 'lucide-react';
 
 export interface QuestionPageProps {
   question: Question;
-  answer: string | string[] | File | null; // Обновлённый тип
+  answer: string | string[] | File | null | Record<string, string>; 
   onAnswer: (answer: string | string[] | File | null) => void;
   onNext: () => void;
   onPrev: () => void;
@@ -35,7 +35,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ question, answer, isNextDis
   }
 
   function getProgressPercentage(currentPage:number, totalPages:number) {
-    if (totalPages === 0) return 0; // Защита от деления на ноль
+    if (totalPages === 0) return 0;
     return ((currentPage / totalPages) * 100).toFixed(0);
 }
 

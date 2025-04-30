@@ -3,12 +3,16 @@ export interface AnswerOption {
   file?: string;
 }
 
+export interface InputField {
+  placeholder: string;
+}
+
 export interface Question {
   id: string;
   question: string;
   required: boolean;
   type: 'multiple' | 'single' | 'input' | 'imageText' | 'imageUrl' | 'dropdownList' | 'fileUpload' | 'calendar';
-  answers: AnswerOption[] | string[];
+  answers: AnswerOption[] | string[] | InputField[];
 }
 
 export interface ContactInput {
@@ -87,11 +91,11 @@ export interface QuizState {
 
 export interface IAnswers {
   answers: Record<string, IAnswerDetail>;
-  formContact: { [key: string]: string };
+  formContact: Record<string, string>;
 }
 
 export interface IAnswerDetail {
   question: string;
-  answer: string | string[] | File | null;
+  answer: string | string[] | File | null | Record<string, string>;
   questionType: Question['type'];
 }

@@ -30,14 +30,15 @@ interface ContactFormProps {
 }
 
 const ContactFormQuiz: React.FC<ContactFormProps> = ({ links, contactForm, contactInfo, handleUpdateContactInfo }) => {
-
   const [formContact, setFormContact] = useState(contactInfo);
   const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [agrre, setAgree] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
-
   const { answers } = useSelector((state: RootState) => state.quiz);
+
+  console.log(contactForm)
+
 
   const handleChange = (id: string, value: string) => {
     const updatedState = { ...formContact, [id]: value };
@@ -50,7 +51,7 @@ const ContactFormQuiz: React.FC<ContactFormProps> = ({ links, contactForm, conta
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Останавливаем отправку формы, если есть ошибки
+    event.preventDefault();
 
     const newErrors: { [key: string]: boolean } = {};
 
@@ -86,12 +87,23 @@ const ContactFormQuiz: React.FC<ContactFormProps> = ({ links, contactForm, conta
 
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
-      {contactForm.backgroundImage && <div
+      <div
         className={styles.imageBlock}
-        style={{ backgroundImage: `url(${contactForm.backgroundImage.file})` }}
-      ></div>}
+        style={{
+          backgroundImage: contactForm.backgroundImage
+            ? `url(${contactForm.backgroundImage.file})`
+            : 'none',
+        }}
+      ></div>
       <div className={styles.formBlock}>
-        <h2 className={styles.formTitle}>Заполните форму, чтобы получить результаты теста</h2>
+        <h2 className={styles.formTitle}>
+          {contactForm.leftInputs[0]?.value?.trim()
+            ? contactForm.leftInputs[0].value
+            : 'Заполните форму, чтобы получить результаты теста'}
+        </h2>
+        {contactForm.leftInputs[1]?.value?.trim() && (
+          <p className={styles.formSubtitle}>{contactForm.leftInputs[1].value}</p>
+        )}
         {contactForm.rightInputs.map((input) => (
           <div key={input.id} className={styles.inputContainer}>
             <input

@@ -2,29 +2,44 @@ import React, { useState, useEffect } from 'react';
 import styles from './InputQuestion.module.css';
 
 
+interface InputField {
+  placeholder: string;
+}
+
 interface InputQuestionProps {
   question: {
     id: string;
     question: string;
     required: boolean;
     type: string;
+    answers: InputField[];
   };
-answer: string | null;
-  onAnswer: (answer: string) => void;
+  answer: Record<string, string> | null;
+  onAnswer: (answer: Record<string, string>) => void;
 }
-
 const InputQuestion: React.FC<InputQuestionProps> = ({ question, answer, onAnswer }) => {
-  
-  const [inputValue, setInputValue] = useState<string>(typeof answer === 'string' ? answer : '');
+
+  const [inputValues, setInputValues] = useState<Record<string, string>>({});
 
 
   useEffect(() => {
-    setInputValue(typeof answer === 'string' ? answer : '');
-  }, [answer]);
+    if (answer) {
+      setInputValues(answer);
+    } else {
+      const initialState: Record<string, string> = {};
+      question.answers.forEach((field) => {
+        if ('placeholder' in field) {
+          initialState[field.placeholder] = '';
+        }
+      });
+      setInputValues(initialState);
+    }
+  }, [answer, question.answers]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    onAnswer(e.target.value);
+  const handleChange = (key: string, value: string) => {
+    const updated = { ...inputValues, [key]: value };
+    setInputValues(updated);
+    onAnswer(updated);
   };
 
   return (
@@ -32,17 +47,23 @@ const InputQuestion: React.FC<InputQuestionProps> = ({ question, answer, onAnswe
       <h2>{question.question}</h2>
       <form>
         <div className={styles.container}>
-          <label htmlFor={question.id}>
-            <input
-              id={question.id}
-              className={styles.inputText}
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              required={question.required}
-              placeholder="Введите ваш ответ"
-            />
-          </label>
+          {question.answers.map((field) => {
+            const key = field.placeholder;
+            return (
+              <div className={styles.inputWrapper} key={key}>
+                <label htmlFor={key}>
+                  <input
+                    id={key}
+                    className={styles.inputText}
+                    type="text"
+                    value={inputValues[key] || ''}
+                    onChange={(e) => handleChange(key, e.target.value)}
+                    placeholder={field.placeholder}
+                  />
+                </label>
+              </div>
+            );
+          })}
         </div>
       </form>
     </div>
